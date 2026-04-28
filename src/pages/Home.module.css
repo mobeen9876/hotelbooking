@@ -1,0 +1,355 @@
+.page {
+  padding: 32px 16px;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* ── Banner ── */
+.banner {
+  background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+  border-radius: 20px;
+  padding: 40px 32px;
+  margin-bottom: 24px;
+}
+
+.tag {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #e8c97a;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.bannerTitle {
+  font-family: "Georgia", serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.bannerEm {
+  font-style: italic;
+  color: #e8c97a;
+}
+
+.bannerSub {
+  color: #888;
+  font-size: 15px;
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
+}
+
+.cardTitle {
+  font-family: "Georgia", serif;
+  font-size: 24px;
+  color: #1c1c1e;
+  margin-bottom: 4px;
+}
+
+.cardSub {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 28px;
+}
+
+/* ── Calendar ── */
+.calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.monthLabel {
+  font-family: "Georgia", serif;
+  font-size: 20px;
+  color: #1c1c1e;
+}
+
+.navBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #f7f4ef;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+.navBtn:hover {
+  background: #eeeae3;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.dayLabel {
+  text-align: center;
+  font-size: 11px;
+  color: #aaa;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 0;
+  font-weight: 500;
+}
+
+/* ── Day cells ── */
+.cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.past {
+  color: #ccc;
+  cursor: not-allowed;
+  background: #fafafa;
+}
+
+.booked {
+  background: #fff5f5;
+  color: #e07070;
+  border-color: #fdd;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.selected {
+  background: #1c1c1e;
+  color: #e8c97a;
+  border-color: #1c1c1e;
+  font-weight: 600;
+}
+
+.today {
+  border-color: #e8c97a;
+  color: #c9a84c;
+  font-weight: 600;
+  background: #fffbf0;
+}
+
+.available {
+  background: #f7f4ef;
+  color: #1c1c1e;
+}
+
+.available:hover {
+  background: #eeeae3;
+}
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #888;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 1.5px solid transparent;
+}
+
+.dotAvailable {
+  background: #f7f4ef;
+  border-color: #1c1c1e;
+}
+.dotBooked {
+  background: #fff5f5;
+  border-color: #e07070;
+}
+.dotSelected {
+  background: #1c1c1e;
+  border-color: #1c1c1e;
+}
+
+/* ── Bottom section ── */
+.selectedBox {
+  background: #fffbf0;
+  border: 1.5px solid #e8c97a;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #c9a84c;
+  margin-top: 16px;
+}
+
+.bookBtn {
+  width: 100%;
+  padding: 15px;
+  background: #1c1c1e;
+  color: #e8c97a;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: opacity 0.2s;
+}
+
+.bookBtn:hover {
+  opacity: 0.85;
+}
+
+.bookBtnOff {
+  width: 100%;
+  padding: 15px;
+  background: #ccc;
+  color: #888;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: not-allowed;
+  margin-top: 20px;
+}
+
+.success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #166534;
+  margin-top: 16px;
+}
+
+/* ── Chat FAB ── */
+.fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #1c1c1e;
+  border: 2px solid #e8c97a;
+  color: #e8c97a;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  z-index: 998;
+  transition: transform 0.2s;
+}
+
+.fab:hover {
+  transform: scale(1.08);
+}
+
+.fabDot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 11px;
+  height: 11px;
+  background: #e07070;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .page {
+    padding: 16px 12px;
+  }
+
+  .banner {
+    padding: 28px 20px;
+    border-radius: 16px;
+  }
+
+  .bannerTitle {
+    font-size: 26px;
+  }
+
+  .bannerSub {
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .cardTitle {
+    font-size: 20px;
+  }
+
+  .monthLabel {
+    font-size: 17px;
+  }
+
+  .cell {
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .dayLabel {
+    font-size: 10px;
+    padding: 4px 0;
+  }
+
+  .grid {
+    gap: 4px;
+  }
+
+  .legend {
+    gap: 10px;
+  }
+
+  .legendItem {
+    font-size: 11px;
+  }
+
+  .bookBtn,
+  .bookBtnOff {
+    font-size: 14px;
+    padding: 13px;
+  }
+
+  .fab {
+    bottom: 18px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,90 @@
+.nav {
+  background: #1c1c1e;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logo {
+  font-family: "Georgia", serif;
+  font-size: 22px;
+  color: #e8c97a;
+  text-decoration: none;
+  letter-spacing: 1px;
+  padding: 12px 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.link {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: #e8c97a;
+}
+
+.linkActive {
+  color: #e8c97a;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(232, 201, 122, 0.12);
+  white-space: nowrap;
+}
+
+.btn {
+  color: #e8c97a;
+  background: rgba(232, 201, 122, 0.1);
+  border: 1px solid rgba(232, 201, 122, 0.3);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: rgba(232, 201, 122, 0.2);
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 8px 16px;
+  }
+
+  .logo {
+    font-size: 19px;
+  }
+
+  .link,
+  .linkActive {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}

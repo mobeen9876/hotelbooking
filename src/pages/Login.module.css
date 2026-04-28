@@ -1,0 +1,118 @@
+.wrapper {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 48px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 24px 16px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .card {
+    padding: 28px 20px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+}
+
+.tag {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #e8c97a;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: "Georgia", serif;
+  font-size: 34px;
+  color: #1c1c1e;
+  margin-bottom: 6px;
+}
+
+.sub {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 32px;
+}
+
+.link {
+  color: #c9a84c;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.group {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid #e8e4dd;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #1c1c1e;
+  outline: none;
+  background: #fafaf8;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #e8c97a;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: #1c1c1e;
+  color: #e8c97a;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
