@@ -30,7 +30,13 @@ export function ChatProvider({ children }) {
           }));
         },
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          console.warn("Messages channel issue:", status, err);
+          // Fallback: refetch all messages so nothing is missed
+          fetchMessages();
+        }
+      });
 
     return () => supabase.removeChannel(channel);
   }, []);

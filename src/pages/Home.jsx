@@ -37,6 +37,25 @@ function Home({ isAdmin }) {
     supabase.auth.getUser().then(({ data }) => {
       setUserId(data.user?.id ?? null);
     });
+
+    // Real-time: when any user books a date, update the calendar for everyone
+    const channel = supabase
+      .channel("home-bookings-channel")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "bookings" },
+        (payload) => {
+          setBookedDates((prev) => [...prev, payload.new.date]);
+        },
+      )
+      .subscribe((status, err) => {
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          console.warn("Home bookings channel issue:", status, err);
+          fetchBookedDates();
+        }
+      });
+
+    return () => supabase.removeChannel(channel);
   }, []);
 
   useEffect(() => {

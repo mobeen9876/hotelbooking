@@ -94,7 +94,13 @@ function Admin() {
           });
         },
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          console.warn("Bookings channel issue:", status, err);
+          // Fallback: refetch so admin doesn't miss any bookings
+          fetchBookings();
+        }
+      });
 
     return () => supabase.removeChannel(channel);
   }, []);
