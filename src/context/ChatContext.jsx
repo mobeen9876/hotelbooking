@@ -6,12 +6,11 @@ const ChatContext = createContext();
 export function ChatProvider({ children }) {
   const [chats, setChats] = useState({});
 
-  // readMap stores { [userId]: { adminCount, userCount } }
-  // adminCount = how many admin messages were seen last time user opened chat
-  // userCount  = how many user messages were seen last time admin opened chat
+  // readMap stores { [userId]: { lastSeenAdminId, lastSeenUserId } }
+  // These are actual DB message IDs — stable across devices and refreshes
   const [readMap, setReadMap] = useState(() => {
     try {
-      const saved = localStorage.getItem("chat_readMap_v2");
+      const saved = localStorage.getItem("chat_readMap_v3");
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -20,10 +19,8 @@ export function ChatProvider({ children }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem("chat_readMap_v2", JSON.stringify(readMap));
-    } catch {
-      // ignore storage errors
-    }
+      localStorage.setItem("chat_readMap_v3", JSON.stringify(readMap));
+    } catch {}
   }, [readMap]);
 
   useEffect(() => {
@@ -44,7 +41,7 @@ export function ChatProvider({ children }) {
             ...prev,
             [msg.user_id]: [
               ...(prev[msg.user_id] || []),
-              { from: msg.from, text: msg.text, time },
+              { id: msg.id, from: msg.from, text: msg.text, time },
             ],
           }));
         },
@@ -74,6 +71,7 @@ export function ChatProvider({ children }) {
     data.forEach((msg) => {
       if (!grouped[msg.user_id]) grouped[msg.user_id] = [];
       grouped[msg.user_id].push({
+        id: msg.id,
         from: msg.from,
         text: msg.text,
         time: new Date(msg.created_at).toLocaleTimeString("en-US", {
@@ -94,39 +92,41 @@ export function ChatProvider({ children }) {
     if (error) console.error(error);
   };
 
-  // Admin: red dot if user sent messages since admin last opened that chat
+  // Admin: red dot if there are user messages with id > lastSeenUserId
   const hasUnread = (userId) => {
     const msgs = chats[userId] || [];
-    const totalUserMsgs = msgs.filter((m) => m.from === "user").length;
-    const seenUserMsgs = readMap[userId]?.userCount ?? 0;
-    return totalUserMsgs > seenUserMsgs;
+    const lastSeen = readMap[userId]?.lastSeenUserId ?? 0;
+    return msgs.some((m) => m.from === "user" && m.id > lastSeen);
   };
 
-  // Admin opens a chat — mark all current user messages as seen
+  // Admin opens a chat — save the highest user message id as seen
   const markRead = (userId) => {
     const msgs = chats[userId] || [];
-    const totalUserMsgs = msgs.filter((m) => m.from === "user").length;
+    const userMsgs = msgs.filter((m) => m.from === "user");
+    if (userMsgs.length === 0) return;
+    const maxId = Math.max(...userMsgs.map((m) => m.id));
     setReadMap((prev) => ({
       ...prev,
-      [userId]: { ...prev[userId], userCount: totalUserMsgs },
+      [userId]: { ...prev[userId], lastSeenUserId: maxId },
     }));
   };
 
-  // User: red dot if admin sent messages since user last opened chat
+  // User: red dot if there are admin messages with id > lastSeenAdminId
   const hasAdminReply = (userId) => {
     const msgs = chats[userId] || [];
-    const totalAdminMsgs = msgs.filter((m) => m.from === "admin").length;
-    const seenAdminMsgs = readMap[userId]?.adminCount ?? 0;
-    return totalAdminMsgs > seenAdminMsgs;
+    const lastSeen = readMap[userId]?.lastSeenAdminId ?? 0;
+    return msgs.some((m) => m.from === "admin" && m.id > lastSeen);
   };
 
-  // User opens their chat — mark all current admin messages as seen
+  // User opens their chat — save the highest admin message id as seen
   const markUserRead = (userId) => {
     const msgs = chats[userId] || [];
-    const totalAdminMsgs = msgs.filter((m) => m.from === "admin").length;
+    const adminMsgs = msgs.filter((m) => m.from === "admin");
+    if (adminMsgs.length === 0) return;
+    const maxId = Math.max(...adminMsgs.map((m) => m.id));
     setReadMap((prev) => ({
       ...prev,
-      [userId]: { ...prev[userId], adminCount: totalAdminMsgs },
+      [userId]: { ...prev[userId], lastSeenAdminId: maxId },
     }));
   };
 
