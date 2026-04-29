@@ -5,7 +5,26 @@ const ChatContext = createContext();
 
 export function ChatProvider({ children }) {
   const [chats, setChats] = useState({});
-  const [readMap, setReadMap] = useState({});
+
+  // readMap stores { [userId]: { adminCount, userCount } }
+  // adminCount = how many admin messages were seen last time user opened chat
+  // userCount  = how many user messages were seen last time admin opened chat
+  const [readMap, setReadMap] = useState(() => {
+    try {
+      const saved = localStorage.getItem("chat_readMap_v2");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("chat_readMap_v2", JSON.stringify(readMap));
+    } catch {
+      // ignore storage errors
+    }
+  }, [readMap]);
 
   useEffect(() => {
     fetchMessages();
@@ -33,7 +52,6 @@ export function ChatProvider({ children }) {
       .subscribe((status, err) => {
         if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
           console.warn("Messages channel issue:", status, err);
-          // Fallback: refetch all messages so nothing is missed
           fetchMessages();
         }
       });
@@ -76,30 +94,40 @@ export function ChatProvider({ children }) {
     if (error) console.error(error);
   };
 
-  // returns true if there are messages from "user" that haven't been read yet
+  // Admin: red dot if user sent messages since admin last opened that chat
   const hasUnread = (userId) => {
     const msgs = chats[userId] || [];
-    const lastReadIndex = readMap[userId] ?? -1;
-    return msgs.some((m, i) => m.from === "user" && i > lastReadIndex);
+    const totalUserMsgs = msgs.filter((m) => m.from === "user").length;
+    const seenUserMsgs = readMap[userId]?.userCount ?? 0;
+    return totalUserMsgs > seenUserMsgs;
   };
 
-  // call this when admin opens a chat to clear the red dot
+  // Admin opens a chat — mark all current user messages as seen
   const markRead = (userId) => {
     const msgs = chats[userId] || [];
-    setReadMap((prev) => ({ ...prev, [userId]: msgs.length - 1 }));
+    const totalUserMsgs = msgs.filter((m) => m.from === "user").length;
+    setReadMap((prev) => ({
+      ...prev,
+      [userId]: { ...prev[userId], userCount: totalUserMsgs },
+    }));
   };
 
-  // returns true if there are new "admin" messages the user hasn't seen
+  // User: red dot if admin sent messages since user last opened chat
   const hasAdminReply = (userId) => {
     const msgs = chats[userId] || [];
-    const lastReadIndex = readMap[userId] ?? -1;
-    return msgs.some((m, i) => m.from === "admin" && i > lastReadIndex);
+    const totalAdminMsgs = msgs.filter((m) => m.from === "admin").length;
+    const seenAdminMsgs = readMap[userId]?.adminCount ?? 0;
+    return totalAdminMsgs > seenAdminMsgs;
   };
 
-  // call this when user opens their chat window
+  // User opens their chat — mark all current admin messages as seen
   const markUserRead = (userId) => {
     const msgs = chats[userId] || [];
-    setReadMap((prev) => ({ ...prev, [userId]: msgs.length - 1 }));
+    const totalAdminMsgs = msgs.filter((m) => m.from === "admin").length;
+    setReadMap((prev) => ({
+      ...prev,
+      [userId]: { ...prev[userId], adminCount: totalAdminMsgs },
+    }));
   };
 
   return (
